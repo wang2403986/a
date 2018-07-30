@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>绘制方格图</title>
+</head>
+<body>
+	<canvas id="canvas" width="1000" height="1000"></canvas>
+	<script type="text/javascript">
+		//获取上下文
+		var canvas=document.getElementById("canvas");
+		var ctx=canvas.getContext("2d");
+		//描绘背景
+		var gradient=ctx.createLinearGradient(0,0,0,300);//createLinearGradient() 方法创建线性的渐变对象。
+		gradient.addColorStop(0,"#e0e0e0");
+		gradient.addColorStop(1,"#ffffff");
+		//ctx.fillStyle=gradient;
+		//ctx.fillRect(0,0,canvas.width,canvas.height);
+		//描绘边框
+		var grid_cols=100; var scale = 1000/100;
+		var grid_rows=100;
+		var cell_height=canvas.height/grid_rows;
+		var cell_width=canvas.width/grid_cols;
+		ctx.lineWidth=1;
+		ctx.strokeStyle="#000000";
+		//结束边框描绘
+		ctx.beginPath();
+		//准备画横线
+		for(var col=0;col<=grid_cols;col++)
+			{
+				var x=col*cell_width;
+				ctx.moveTo(x,0);
+				ctx.lineTo(x,canvas.height);
+			}
+		//准备画竖线
+		for(var row=0;row<=grid_rows;row++)
+			{
+				var y=row*cell_height;
+				ctx.moveTo(0,y);
+				ctx.lineTo(canvas.width,y);
+			}
+		//完成描绘
+		ctx.stroke();
+		
+		g_gameUnits=[
+		 /* {m_vPos : {x: 48.84534423442768, y: 0, z: 41.36563588576706}},
+			{m_vPos : {x: 254.65764480397883, y: 0, z: 180.35258844433417}},
+			{m_vPos: {x: 262.393993692557, y: 0, z: 73.9199165545977}}, */
+			{m_vPos : {x: 314.15809132513715 -240, y: 0, z: 249.90942708739982 -240}},
+			 /* {m_vPos : {x: 380.72743608813295, y: 0, z: 309.49707858869346}} */
+			 ];
+		for (var j=0; j<g_gameUnits.length;j++) {
+			var unit = g_gameUnits[j];
+			//if(unit === unit0) continue;
+			var radius = 8;
+			var expand = radius + radius;
+			var scalef = 1;
+			var centerX=parseInt(unit.m_vPos.x*scalef), centerY=parseInt(unit.m_vPos.z*scalef),
+			startX = centerX- expand +1, startY = centerY-expand +1;
+			var toIntX=centerX+expand-1,toIntY=centerY+expand-1;
+			if(startX<0) startX=0;
+			if(toIntX>=500) toIntX=500-1;
+			if(startY<0) startY=0;
+			if(toIntY>=500) toIntY=500-1;
+			if(startX>=500|| startY>=500) continue;
+			ctx.fillStyle="#0000ff";
+			for (x= startX; x <=toIntX;x++) {
+//				g[x][startY].weight= 0;
+//				g[x][toIntY].weight= 0;
+				//grid.setWalkableAt(x, startY, false);
+				//grid.setWalkableAt(x, toIntY, false);
+				ctx.fillRect((x)*scale,(startY)*scale,scale,scale);
+				ctx.fillRect((x)*scale,(toIntY)*scale,scale,scale);
+			}
+			for (y= startY; y <=toIntY;y++) {
+//				g[startX][y].weight= 0;
+//				g[toIntX][y].weight= 0;
+				//grid.setWalkableAt(startX, y, false);
+				//grid.setWalkableAt(toIntX, y, false);
+				ctx.fillRect((startX)*scale,(y)*scale,scale,scale);
+				ctx.fillRect((toIntX)*scale,(y)*scale,scale,scale);
+			}
+		}
+		
+		
+		var x0=1,y0=1,xEnd=12,yEnd=28;
+		x0=330.0200000000001 -240, y0= 264.46475407130646 -240;
+		xEnd=328.5 -240, yEnd= 265.5 -240;
+		//x0=2,y0=2,xEnd=28,yEnd=12;
+		//x0=12,y0=28,xEnd=2,yEnd=2;
+		//x0=28,y0=12,xEnd=1,yEnd=1;
+		//x0=1.3,y0=1.3,xEnd=28.3,yEnd=12.3;
+		//x0=1.3,y0=12.3,xEnd=28.3,yEnd=1.3;
+		//x0=1.3,y0=1.3,xEnd=12.3,yEnd=28.3;
+		//x0=12.3,y0=28.3,xEnd=1.3,yEnd=1.3;
+		//x0=28.3,y0=12.3,xEnd=1.3,yEnd=1.3;
+		//x0=28.3,y0=12.3,xEnd=1.3,yEnd=1.3;
+		var dx = xEnd - x0;                             //x的增量
+	    var dy = yEnd - y0;                             //y的增量
+	    var steps, steps_start,steps_by_x=1,iSteps;
+	    var xIncrement, yIncrement, x = x0, y = y0;
+	    if (Math.abs(dx) > Math.abs(dy)) {
+	        steps =iSteps= Math.abs(dx);
+	        steps_start=x0;
+	        if(x0<xEnd) steps_start=Math.floor(steps_start+1)- steps_start;
+	        else if(x0>xEnd) steps_start= steps_start-Math.floor(steps_start), iSteps++;
+	        else steps_start= 0;
+	    } else {
+	        steps =iSteps= Math.abs(dy);
+	        steps_by_x=0;
+	        steps_start=y0;
+	        if(y0<yEnd) steps_start=Math.floor(steps_start+1)- steps_start;
+	        else if(y0>yEnd) steps_start= steps_start-Math.floor(steps_start), iSteps++;
+	        else steps_start= 0;
+	    }
+
+	    xIncrement = (dx) / (steps);          //x每步骤增量
+	    yIncrement = (dy) / (steps);          //y的每步增量
+	    ctx.fillStyle="#ff0000";
+	    var lastX=(x0),lastY=(y0);
+	    var iLastX=lastX>>0, iLastY=lastY>>0;
+	    ctx.fillRect((iLastX)*scale,(iLastY)*scale,scale,scale);
+	    for(var k = steps_start;k <= (iSteps); k++)
+	    {
+	        x = (k)*xIncrement+x0;
+	        y = (k)*yIncrement+y0;
+	        var ix=(x>>0),iy=(y>>0);
+	        if(steps_by_x) {
+	        	if(iy==y) {
+	        		ctx.fillRect(ix*scale,(iy-1)*scale,scale,scale);
+	        		ctx.fillRect((ix-1)*scale,(iy-1)*scale,scale,scale);
+	        		ctx.fillRect((ix-1)*scale,(iy)*scale,scale,scale);
+	        	}
+	        	if(ix!=iLastX  && iy!=iLastY ) {
+	        		var ay = iLastY>iy? iLastY:iy;
+	        		var ax = iLastX>ix? ix:iLastX;
+	        		ctx.fillRect(ax*scale,ay*scale,scale,scale);
+	        	}
+	        } else {
+	        	if(ix==x) {
+	        		ctx.fillRect(ix*scale,(iy-1)*scale,scale,scale);
+	        		ctx.fillRect((ix-1)*scale,(iy-1)*scale,scale,scale);
+	        		ctx.fillRect((ix-1)*scale,(iy)*scale,scale,scale);
+	        	}
+	        	if(ix!=iLastX  && iy!=iLastY ) {
+	        		var ay = iLastY<iy? iLastY: iy;
+	        		var ax = iLastX<ix? ix: iLastX;
+	        		ctx.fillRect(ax*scale,ay*scale,scale,scale);
+	        	}
+	        }
+	        lastX=x;lastY=y;
+	        iLastX=ix; iLastY=iy;
+	        ctx.fillRect(ix*scale,iy*scale,scale,scale);
+	    }
+	    ctx.strokeStyle="#000000";
+	    ctx.moveTo(scale*x0,scale*y0);
+		ctx.lineTo(scale*xEnd, scale*yEnd);
+		ctx.stroke();
+	</script>
+</body>
+</html>
