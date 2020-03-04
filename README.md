@@ -1,31 +1,99 @@
-float determinant(mat2 m) {
-  return m[0][0]*m[1][1] - m[1][0]*m[0][1] ;
-}
-float determinant(mat4 m) {
-  mat2 a = mat2(m);
-  mat2 b = mat2(m[2].xy,m[3].xy);
-  mat2 c = mat2(m[0].zw,m[1].zw);
-  mat2 d = mat2(m[2].zw,m[3].zw);
-  float s = determinant(a);
-  return s*determinant(d-(1.0/s)*c*mat2(a[1][1],-a[0][1],-a[1][0],a[0][0])*b);
-}
+Request URL: https://uat.citivelocity.com/ReportingWebService/api/v2/packages
+Request Method: POST
+Status Code: 201 
+Remote Address: 23.77.56.80:443
+Referrer Policy: no-referrer-when-downgrade
 
-mat4 matrix;
-void decompose(mat4 te){
-float sx = length(te[0].xyz);
-float sy = length(te[1].xyz);
-float sz = length(te[2].xyz);
-float det = determinant(te);
-	if ( det < 0.0 ) sx = - sx;
-followTargetPosition = te[3].xyz;
-matrix = te;
-float invSX = 1.0 / sx;
-float invSY = 1.0 / sy;
-float invSZ = 1.0 / sz;
-matrix[0].xyz *=invSX;
-matrix[1].xyz *=invSY;
-matrix[2].xyz *=invSZ;
-followTargetScale = vec3(sx,sy,sz);
+request:
+{"clientProfileId":"ASICP","appId":"CLARITY","globalSettings":{"entry":[{"key":"targetFormat","value":{"@type":"string","value":"xlf"}},{"key":"permittedFormats","value":{"@type":"string","value":"xlf"}}]},"assembly":{"report":[{"@reportName":"QA10_CUSTOM_FILTERED1","location":"5e5e0f62aadd4e51c3ae19e8","auxiliaryFilterId":"5e5e0fd4aadd4e51c3ae1a0b"}]},"id":"","name":"aaa111","description":""}
+
+response:
+{
+   "@type" : "object",
+   "dataAsOf" : 1583311711329,
+   "expires" : 1583311711329,
+   "cacheable" : false,
+   "userId" : "UE179116",
+   "start" : 0,
+   "size" : 0,
+   "totalSize" : 0,
+   "page" : 0,
+   "hasMore" : false,
+   "generationMS" : 1636,
+   "data" : {
+      "@type" : "packageInfoDTO",
+      "package" : {
+         "name" : "aaa111",
+         "itemId" : "CLARITY_ASICP_aaa111",
+         "assembly" : {
+            "@displayInTOC" : true,
+            "@execPriority" : 0,
+            "@id" : 0,
+            "@includedInOutput" : true,
+            "parameters" : {
+               "entry" : [ ]
+            },
+            "report" : [ {
+               "@displayInTOC" : true,
+               "@execPriority" : 0,
+               "@id" : 0,
+               "@includedInOutput" : true,
+               "@reportName" : "QA10_CUSTOM_FILTERED1",
+               "parameters" : {
+                  "entry" : [ ]
+               },
+               "auxiliaryFilterId" : "5e5e0fd4aadd4e51c3ae1a0b",
+               "location" : "5e5e0f62aadd4e51c3ae19e8"
+            } ]
+         },
+         "lastUpdated" : "2020-03-04T03:48:29.693-05:00",
+         "clientProfileId" : "ASICP",
+         "description" : "",
+         "userId" : "UE179116",
+         "appId" : "CLARITY",
+         "globalSettings" : {
+            "entry" : [ {
+               "key" : "permittedFormats",
+               "value" : {
+                  "@type" : "string",
+                  "value" : "xlf"
+               }
+            }, {
+               "key" : "targetFormat",
+               "value" : {
+                  "@type" : "string",
+                  "value" : "xlf"
+               }
+            } ]
+         },
+         "id" : "5e5f6b5d9a89421fea359e6f",
+         "deleted" : false
+      },
+      "auxiliaryFilter" : {
+         "id" : "5e5f6b5eab37161c73577755",
+         "lastUpdated" : "2020-03-04T03:48:30.491-05:00",
+         "packageId" : "5e5f6b5d9a89421fea359e6f",
+         "resourceType" : "PACKAGE",
+         "citiOwned" : false,
+         "userId" : "UE179116",
+         "domainName" : {
+            "defaultDisplayName" : "Package"
+         },
+         "reportName" : {
+            "defaultDisplayName" : "aaa111"
+         },
+         "standardReportName" : {
+            "defaultDisplayName" : "aaa111"
+         },
+         "status" : "A",
+         "inSchedule" : false,
+         "reportType" : "Standard",
+         "targetOutputType" : "xlf",
+         "parametersType" : "Default",
+         "possibleOutputTypes" : [ "XLF" ],
+         "appId" : "CLARITY",
+         "isDefault" : false,
+         "runtimeParams" : [ ]
+      }
+   }
 }
-
-
